@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opportunities - Ideanator</title>
+  <link rel="icon" href="logo.png" type="image/png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #ffffff;
+      color: #000000;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      height: 40px;
+      width: auto;
+      border-radius: 8px;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    
+    .nav-links a {
+      text-decoration: none;
+      color: #666;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+    
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: #000;
+    }
+    
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #000;
+      transition: width 0.3s ease;
+    }
+    
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      width: 100%;
+    }
+    
+    main {
+      flex: 1;
+      padding: 120px 2rem 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    
+    .page-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    
+    h1 {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      color: #666;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .opportunities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+    
+    .opportunity-card {
+      background: #f8f8f8;
+      border-radius: 12px;
+      padding: 2rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .opportunity-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .opportunity-card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #000;
+    }
+    
+    .opportunity-card p {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    
+    .positions {
+      margin-top: 1rem;
+    }
+    
+    .positions h3 {
+      font-size: 1rem;
+      color: #999;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .position-list {
+      list-style: none;
+    }
+    
+    .position-list li {
+      padding: 0.75rem 0;
+      color: #333;
+      font-weight: 500;
+      position: relative;
+      padding-left: 1.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .position-list li:hover {
+      color: #000;
+      transform: translateX(4px);
+    }
+    
+    .position-list li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: #000;
+      transition: transform 0.2s ease;
+    }
+    
+    .position-list li:hover::before {
+      transform: translateX(4px);
+    }
+    
+    .internship-section {
+      background: linear-gradient(135deg, #f5d020 0%, #f53d00 100%);
+      border-radius: 16px;
+      padding: 3rem;
+      color: white;
+      text-align: center;
+    }
+    
+    .internship-section h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    
+    .internship-section p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .apply-button {
+      display: inline-block;
+      background: white;
+      color: #f53d00;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .apply-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      z-index: 2000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .modal.show {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+    }
+    
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    
+    .modal.show .modal-content {
+      transform: scale(1);
+    }
+    
+    .modal-header {
+      padding: 2rem;
+      border-bottom: 1px solid #f0f0f0;
+      position: relative;
+    }
+    
+    .modal-header h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #000;
+      margin: 0;
+    }
+    
+    .modal-department {
+      display: inline-block;
+      background: linear-gradient(135deg, #f5d020 0%, #f53d00 100%);
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-top: 0.5rem;
+    }
+    
+    .close-modal {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: #f0f0f0;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: #666;
+      transition: all 0.2s ease;
+    }
+    
+    .close-modal:hover {
+      background: #e0e0e0;
+      color: #000;
+      transform: rotate(90deg);
+    }
+    
+    .modal-body {
+      padding: 2rem;
+    }
+    
+    .modal-section {
+      margin-bottom: 2rem;
+    }
+    
+    .modal-section:last-child {
+      margin-bottom: 0;
+    }
+    
+    .modal-section h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      color: #000;
+    }
+    
+    .modal-section p {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 0.5rem;
+    }
+    
+    .modal-section ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .modal-section ul li {
+      position: relative;
+      padding-left: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: #666;
+      line-height: 1.6;
+    }
+    
+    .modal-section ul li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: #f53d00;
+      font-weight: bold;
+    }
+    
+    .modal-footer {
+      padding: 2rem;
+      border-top: 1px solid #f0f0f0;
+      text-align: center;
+    }
+    
+    .modal-apply-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #f5d020 0%, #f53d00 100%);
+      color: white;
+      padding: 0.8rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .modal-apply-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(245, 61, 0, 0.3);
+    }
+    
+    footer {
+      padding: 2rem;
+      text-align: center;
+      border-top: 1px solid #f0f0f0;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1rem;
+    }
+    
+    .footer-links a {
+      text-decoration: none;
+      color: #666;
+      font-size: 0.9rem;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+      color: #000;
+    }
+    
+    .copyright {
+      color: #999;
+      font-size: 0.85rem;
+      margin-top: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+      .nav-links {
+        gap: 1rem;
+      }
+      
+      .nav-links a {
+        font-size: 0.9rem;
+      }
+      
+      main {
+        padding: 100px 1.5rem 3rem;
+      }
+      
+      .opportunities-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .internship-section {
+        padding: 2rem 1.5rem;
+      }
+      
+      .modal-content {
+        width: 95%;
+        max-height: 90vh;
+      }
+      
+      .footer-links {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html">
+        <img src="logo.png" alt="Ideanator" class="logo">
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="opportunities.html" class="active">Opportunities</a>
+        <a href="team.html">Team</a>
+      </div>
+    </nav>
+  </header>
+  
+  <main>
+    <div class="page-header">
+      <h1>Join Our Team</h1>
+      <p class="subtitle">We're building the future of innovation and looking for passionate individuals to help turn ideas into reality</p>
+    </div>
+    
+    <div class="opportunities-grid">
+      <div class="opportunity-card">
+        <h2>Product Development</h2>
+        <p>Build cutting-edge features that help innovators validate, refine, and launch their ideas with confidence.</p>
+        <div class="positions">
+          <h3>Open Positions</h3>
+          <ul class="position-list">
+            <li onclick="openModal('ios')">iOS Developer</li>
+            <li onclick="openModal('ml')">Machine Learning Engineer</li>
+            <li onclick="openModal('backend')">Backend Engineer</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="opportunity-card">
+        <h2>Design & Experience</h2>
+        <p>Create intuitive, inspiring experiences that make the journey from idea to implementation seamless and enjoyable.</p>
+        <div class="positions">
+          <h3>Open Positions</h3>
+          <ul class="position-list">
+            <li onclick="openModal('product-designer')">Product Designer</li>
+            <li onclick="openModal('ux-researcher')">UX Researcher</li>
+            <li onclick="openModal('brand')">Brand Designer</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="opportunity-card">
+        <h2>Growth & Community</h2>
+        <p>Help us build a global community of innovators and connect them with the resources they need to succeed.</p>
+        <div class="positions">
+          <h3>Open Positions</h3>
+          <ul class="position-list">
+            <li onclick="openModal('growth')">Growth Marketing Manager</li>
+            <li onclick="openModal('partnerships')">Partnership Manager</li>
+            <li onclick="openModal('community')">Community Lead</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="internship-section">
+      <h2>Internship Program</h2>
+      <p>
+        Are you passionate about innovation and entrepreneurship? Join our internship program to gain hands-on experience in building tools that empower creators worldwide.
+      </p>
+      <p>
+        We offer internships across all departments for motivated individuals who want to contribute to our mission while developing valuable skills.
+      </p>
+      <a href="mailto:ideanatorteam@gmail.com?subject=Internship Application" class="apply-button">
+        Apply Now
+      </a>
+    </div>
+  </main>
+  
+  <!-- Modal -->
+  <div id="roleModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close-modal" onclick="closeModal()">×</button>
+        <h2 id="modalTitle">Role Title</h2>
+        <span id="modalDepartment" class="modal-department">Department</span>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- Content will be dynamically inserted here -->
+      </div>
+      <div class="modal-footer">
+        <a href="mailto:ideanatorteam@gmail.com?subject=Application for [Position]" id="modalApplyButton" class="modal-apply-button">
+          Apply for this Position
+        </a>
+      </div>
+    </div>
+  </div>
+  
+  <footer>
+    <div class="footer-links">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="mailto:ideanatorteam@gmail.com">Contact</a>
+    </div>
+    <div class="copyright">
+      © 2025 Ideanator. All rights reserved.
+    </div>
+  </footer>
+  
+  <script>
+    const roles = {
+      'ios': {
+        title: 'iOS Developer',
+        department: 'Product Development',
+        content: `
+          <div class="modal-section">
+            <h3>About the Role</h3>
+            <p>We're looking for a talented iOS Developer to help build and enhance our mobile application. You'll be working on creating smooth, intuitive experiences that help users transform their ideas into actionable plans.</p>
+          </div>
+          <div class="modal-section">
+            <h3>What You'll Do</h3>
+            <ul>
+              <li>Develop and maintain our iOS application using Swift and SwiftUI</li>
+              <li>Implement real-time collaboration features</li>
+              <li>Optimize app performance and user experience</li>
+              <li>Integrate with AI-powered backend services</li>
+              <li>Collaborate with designers to implement pixel-perfect UI</li>
+            </ul>
+          </div>
+          <div class="modal-section">
+            <h3>What We're Looking For</h3>
+            <ul>
+              <li>2+ years of iOS development experience</li>
+              <li>Proficiency in Swift and SwiftUI</li>
+              <li>Experience with Core Data and CloudKit</li>
+              <li>Understanding of iOS design principles and guidelines</li>
+              <li>Passion for creating exceptional mobile experiences</li>
+            </ul>
+          </div>
+        `
+      },
+      'ml': {
+        title: 'Machine Learning Engineer',
+        department: 'Product Development',
+        content: `
+          <div class="modal-section">
+            <h3>About the Role</h3>
+            <p>Join our team to develop AI-powered features that help users evaluate ideas, identify opportunities, and connect with the right resources. You'll be at the forefront of applying ML to innovation and entrepreneurship.</p>
+          </div>
+          <div class="modal-section">
+            <h3>What You'll Do</h3>
+            <ul>
+              <li>Develop ML models for idea evaluation and matching</li>
+              <li>Build recommendation systems for connecting ideas with resources</li>
+              <li>Implement NLP features for idea analysis and categorization</li>
+              <li>Optimize model performance and scalability</li>
+              <li>Collaborate with product team to identify ML opportunities</li>
+            </ul>
+          </div>
+          <div class="modal-section">
+            <h3>What We're Looking For</h3>
+            <ul>
+              <li>3+ years of ML engineering experience</li>
+              <li>Strong background in Python and ML frameworks</li>
+              <li>Experience with NLP and recommendation systems</li>
+              <li>Knowledge of cloud ML platforms (AWS, GCP, or Azure)</li>
+              <li>Ability to translate business problems into ML solutions</li>
+            </ul>
+          </div>
+        `
+      },
+      'backend': {
+        title: 'Backend Engineer',
+        department: 'Product Development',
+        content: `
+          <div class="modal-section">
+            <h3>About the Role</h3>
+            <p>We're seeking a Backend Engineer to architect and build the infrastructure that powers idea validation, collaboration, and growth. You'll design scalable systems that handle real-time updates and intelligent matching.</p>
+          </div>
+          <div class="modal-section">
+            <h3>What You'll Do</h3>
+            <ul>
+              <li>Design and implement scalable backend services and APIs</li>
+              <li>Build real-time collaboration infrastructure</li>
+              <li>Develop data pipelines for analytics and ML features</li>
+              <li>Implement security and privacy best practices</li>
+              <li>Monitor and optimize system performance</li>
+            </ul>
+          </div>
+          <div class="modal-section">
+            <h3>What We're Looking For</h3>
+            <ul>
+              <li>3+ years of backend development experience</li>
+              <li>Proficiency in Node.js, Python, or Go</li>
+              <li>Experience with cloud platforms and microservices</li>
+              <li>Knowledge of databases (PostgreSQL, MongoDB, Redis)</li>
+              <li>Understanding of scalable system design</li>
+            </ul>
+          </div>
+        `
+      },
+      'product-designer': {
+        title: 'Product Designer',
+        department: 'Design & Experience',
+        content: `
+          <div class="modal-section">
+            <h3>About the Role</h3>
+            <p>As a Product Designer, you'll shape how innovators interact with our platform. You'll lead the design process from concept to implementation, creating experiences that inspire and empower users to bring their ideas to life.</p>
+          </div>
+          <div class="modal-section">
+            <h3>What You'll Do</h3>
+            <ul>
+              <li>Lead end-to-end design for new features</li>
+              <li>Conduct user research with innovators and entrepreneurs</li>
+              <li>Create wireframes, prototypes, and high-fidelity designs</li>
+              <li>Develop and maintain our design system</li>
+              <li>Collaborate with engineers and product managers</li>
+            </ul>
+          </div>
+          <div class="modal-section">
+            <h3>What We're Looking For</h3>
+            <ul>
+              <li>3+ years of product design experience</li>
+              <li>Strong portfolio demonstrating user-centered design</li>
+              <li>Proficiency in Figma and prototyping tools</li>
+              <li>Experience with mobile app design</li>
+              <li>Understanding of startup and innovation ecosystems</li>
+            </ul>
+          </div>
+        `
+      },
+      'ux-researcher': {
+        title: 'UX Researcher',
+        department: 'Design & Experience',
+        content: `
+          <div class="modal-section">
+            <h3>About the Role</h3>
+            <p>Help us understand the needs of innovators and entrepreneurs worldwide. You'll conduct research that informs product decisions and ensures we're building features that truly support the innovation journey.</p>
+          </div>
+          <div class="modal-section">
+            <h3>What You'll Do</h3>
+            <ul>
+              <li>Plan and conduct user research studies</li>
+              <li>Interview innovators and entrepreneurs about their needs</li>
+              <li>Analyze user behavior and identify opportunities</li>
+              <li>Create personas and journey maps</li>
+              <li>Present insights to inform product strategy</li>
+            </ul>
+          </div>
+          <div class="modal-section">
+            <h3>What We're Looking For</h3>
+            <ul>
+              <li>2+ years of UX research experience</li>
+              <li>Strong qualitative and quantitative research skills</li>
+              <li>Experience with various research methodologies</li>
+              <li>Excellent communication and presentation skills</li>
+              <li>Interest in innovation and entrepreneurship</li>
+            </ul>
+          </div>
+        `
+      },
+      'brand': {
+        title: 'Brand Designer',
+        department: 'Design & Experience',
+        content: `
+          <div class="modal-section">
+            <h3>About the Role</h3>
+            <p>Define and evolve Ideanator's visual identity. You'll create compelling visuals that communicate our mission to empower innovators and build a brand that resonates with creators worldwide.</p>
+          </div>
+          <div class="modal-section">
+            <h3>What You'll Do</h3>
+            <ul>
+              <li>Develop and maintain brand guidelines</li>
+              <li>Create visual assets for product and marketing</li>
+              <li>Design illustrations and iconography</li>
+              <li>Lead brand campaigns and visual storytelling</li>
+              <li>Ensure brand consistency across all touchpoints</li>
+            </ul>
+          </div>
+          <div class="modal-section">
+            <h3>What We're Looking For</h3>
+            <ul>
+              <li>3+ years of brand design experience</li>
+              <li>Exceptional visual design portfolio</li>
+              <li>Proficiency in Adobe Creative Suite and Figma</li>
+              <li>Strong typography and color theory knowledge</li>
+              <li>Experience with motion design is a plus</li>
+            </ul>
+          </div>
+        `
+      },
+      'growth': {
+        title: 'Growth Marketing Manager',
+        department: 'Growth & Community',
+        content: `
+          <div class="modal-section">
+            <h3>About the Role</h3>
+            <p>Lead our efforts to reach innovators worldwide. You'll develop strategies to acquire, activate, and retain users while building a vibrant community of creators who support each other's journeys.</p>
+          </div>
+          <div class="modal-section">
+            <h3>What You'll Do</h3>
+            <ul>
+              <li>Develop and execute growth marketing strategies</li>
+              <li>Manage acquisition channels and optimize conversion</li>
+              <li>Run experiments to improve user activation and retention</li>
+              <li>Build viral and referral growth mechanisms</li>
+              <li>Analyze metrics and drive data-informed decisions</li>
+            </ul>
+          </div>
+          <div class="modal-section">
+            <h3>What We're Looking For</h3>
+            <ul>
+              <li>3+ years of growth marketing experience</li>
+              <li>Proven track record of scaling user acquisition</li>
+              <li>Strong analytical and experimental mindset</li>
+              <li>Experience with mobile app marketing</li>
+              <li>Understanding of startup and innovation ecosystems</li>
+            </ul>
+          </div>
+        `
+      },
+      'partnerships': {
+        title: 'Partnership Manager',
+        department: 'Growth & Community',
+        content: `
+          <div class="modal-section">
+            <h3>About the Role</h3>
+            <p>Build strategic partnerships that expand our reach and provide value to our users. You'll connect with accelerators, investors, and innovation hubs to create opportunities for our community.</p>
+          </div>
+          <div class="modal-section">
+            <h3>What You'll Do</h3>
+            <ul>
+              <li>Identify and develop strategic partnerships</li>
+              <li>Build relationships with accelerators and incubators</li>
+              <li>Create partnership programs and initiatives</li>
+              <li>Negotiate partnership agreements</li>
+              <li>Manage ongoing partner relationships</li>
+            </ul>
+          </div>
+          <div class="modal-section">
+            <h3>What We're Looking For</h3>
+            <ul>
+              <li>3+ years of partnership or business development experience</li>
+              <li>Strong network in the startup ecosystem</li>
+              <li>Excellent negotiation and relationship skills</li>
+              <li>Strategic thinking and execution abilities</li>
+              <li>Passion for innovation and entrepreneurship</li>
+            </ul>
+          </div>
+        `
+      },
+      'community': {
+        title: 'Community Lead',
+        department: 'Growth & Community',
+        content: `
+          <div class="modal-section">
+            <h3>About the Role</h3>
+            <p>Build and nurture a thriving community of innovators. You'll create spaces where creators connect, collaborate, and support each other in turning their ideas into reality.</p>
+          </div>
+          <div class="modal-section">
+            <h3>What You'll Do</h3>
+            <ul>
+              <li>Manage and grow our online community platforms</li>
+              <li>Develop community programs and events</li>
+              <li>Foster connections between innovators</li>
+              <li>Create content that inspires and educates</li>
+              <li>Identify and empower community ambassadors</li>
+            </ul>
+          </div>
+          <div class="modal-section">
+            <h3>What We're Looking For</h3>
+            <ul>
+              <li>2+ years of community management experience</li>
+              <li>Excellent communication and interpersonal skills</li>
+              <li>Experience with community platforms and tools</li>
+              <li>Understanding of innovation and entrepreneurship</li>
+              <li>Ability to create engaging content and programs</li>
+            </ul>
+          </div>
+        `
+      }
+    };
+    
+    function openModal(roleId) {
+      const modal = document.getElementById('roleModal');
+      const role = roles[roleId];
+      
+      if (role) {
+        document.getElementById('modalTitle').textContent = role.title;
+        document.getElementById('modalDepartment').textContent = role.department;
+        document.getElementById('modalBody').innerHTML = role.content;
+        
+        const applyButton = document.getElementById('modalApplyButton');
+        applyButton.href = `mailto:ideanatorteam@gmail.com?subject=Application for ${role.title}`;
+        
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('show'), 10);
+        
+        document.body.style.overflow = 'hidden';
+      }
+    }
+    
+    function closeModal() {
+      const modal = document.getElementById('roleModal');
+      modal.classList.remove('show');
+      setTimeout(() => {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+      }, 300);
+    }
+    
+    // Close modal when clicking outside
+    document.getElementById('roleModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeModal();
+      }
+    });
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>
